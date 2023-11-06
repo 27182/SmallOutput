@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Join us!</title>
+	<style>
+		textarea {
+			width: 50vw;
+			height: 150px;
+			padding: 12px 20px;
+			box-sizing: border-box;
+			border: 2px solid #ccc;
+			border-radius: 4px;
+			background-color: #f8f8f8;
+			font-size: 16px;
+			resize: none;
+		}
+
+		.wrapper {
+			color: white;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			text-align: center;
+			background-color: black;
+			height: 100vh;
+
+		}
+
+		h1 {
+			margin-top: 10vh;
+			font-size: 50px;
+			margin-bottom: 5vh;
+			/* background: linear-gradient(to left top,#FAFAF6, white, #00FFF0, #00D1FF, #3D6CB9); */
+			background-color: aliceblue;
+			color: transparent;
+			background-clip: text;
+			-webkit-background-clip: text;
+
+		}
+
+
+		input {
+			margin: 8px;
+			padding: 10px;
+			border: double 3px transparent;
+			border-radius: 10px;
+			background-image: linear-gradient(white, white),
+				linear-gradient(to left, #FF5BFF, #D34DEE, #BF4BF8, #2AC9F9, #56F1FF);
+			background-origin: border-box;
+			background-clip: padding-box, border-box;
+		}
+
+
+		#join_button {
+			/*all: unset;
+			margin-top: 20px;
+			font-size: 115%;
+			padding: 40px;
+			background-color: white;
+			border-radius: 50%;
+			color: black;
+			border: outset;*/
+			margin-top: 23px;
+			padding: 25px;
+			border: double 3px transparent;
+			border-radius: 50%;
+			background-image: linear-gradient(white, white),
+				linear-gradient(to left, #FF5BFF, #D34DEE, #BF4BF8, #2AC9F9, #56F1FF);
+			background-origin: border-box;
+			background-clip: padding-box, border-box;
+			background-color: aliceblue;
+			font-size: 150%;
+		}
+	</style>
+</head>
+
+<body style="margin: 0;">
+	<div class="wrapper">
+		<h1>SIGN UP</h1>
+		<input type="text" id="id_input" placeholder="ID" />
+		<input type="password" id="password_input" placeholder="PASSWORD" />
+		<input type="password" id="password_input_2" placeholder="CONFIRM PASSWORD" />
+		<input type="text" id="name" placeholder="NAME" />
+		<div>			
+		<input type="text" id="phone" placeholder="PHONE NUMBER" />
+		<input type="button" id="btnadd" value="ADD"/>
+		</div>
+		<div id="place">
+			
+		</div>
+		<div id="gen">
+			<input type="radio" id="male " name="gender" value="male" /> Male
+			<input type="radio" id="female" name="gender" value="female" /> Female
+		</div>
+		<div>
+			<input type="checkbox"" id=" all" value="all" onchange='toggleAll()' /> 모두
+			<input type="checkbox"" id="" name=" hobby" value="it" /> IT
+			<input type="checkbox"" id="" name=" hobby" value="sport" /> 운동
+			<input type="checkbox"" id="" name=" hobby" value="art" /> 예술
+		</div>
+		<div>지역 :
+			<select value="none">
+				<option disabled selected value style="display: none;"> </option>
+				<option value="ilsan">일산</option>
+				<option value="goyang">고양</option>
+				<option value="munsan">문산</option>
+				<option value="paju">파주</option>
+			</select>
+		</div>
+		
+		<textarea style="margin-top: 10px;">
+		</textarea>
+		
+		<input type="button" id="join_button" value="Go" />
+	</div>
+
+</body>
+
+<script>
+	document.getElementById('btnadd').addEventListener('click', function(){
+		let pl = document.createElement('div');
+		let tx = document.createTextNode('아아');
+		pl.appendChild(tx);
+		document.getElementById('place').appendChild(pl);
+	})
+</script>
+
+
+
+
+
+
+<script>
+	function toggleAll() {
+		let al = document.getElementsByName('hobby');
+
+		al.forEach((a) => {a.checked = document.getElementById('all').checked});
+
+	}
+</script>
+<script>
+	function alert(a, b) {
+		let c = document.createElement('div');
+		let d = document.createTextNode(a);
+		c.style.color = 'red';
+		c.appendChild(d);
+
+
+
+	}
+
+</script>
+
+<script>
+	document.getElementById("join_button").addEventListener("click", () => {
+		let userid, password1, password2, name, phone, check;
+		userid = document.getElementById("id_input");
+		password1 = document.getElementById("password_input");
+		password2 = document.getElementById("password_input_2");
+		name = document.getElementById("name");
+		phone = document.getElementById("phone");
+
+		if (!(/([a-z]|[A-Z]|[0-9])/g.test(userid.value))) {
+			alert('아이디에는 알파벳이나 숫자만 포함될 수 있습니다.', userid);
+			userid.focus();
+			return;
+		} else if (userid.value.length <= 4) {
+			alert('아이디가 너무 짧습니다. (5자 이상 필요)')
+			userid.focus();
+			return;
+		}
+
+		if (password1.value.length <= 5) {
+			alert('비밀번호가 너무 짧습니다. (6자 이상 필요)');
+			password1.focus();
+			return;
+		} else if (password1.value != password2.value) {
+			alert('비밀번호가 일치하지 않습니다.')
+			password2.focus();
+			return;
+		}
+
+		if (!(/[a-z]|[A-Z]|[가-힣]/g.test(name.value)) || name.value.length <= 1) {
+			alert('이름을 정확하게 입력해주세요.');
+			name.focus();
+			return;
+		}
+		if (!(/[0-9]/g.test(phone.value)) || phone.value.length <= 7 || phone.value.length >= 12) {
+			alert('전화번호를 정확하게 입력해주세요')
+			phone.focus();
+			return;
+		}
+
+		let gender = document.getElementsByName('gender');
+		let user_gender;
+
+		gender.forEach((a) => {if (a.checked) user_gender = a.value;});
+
+
+
+
+		if (user_gender == undefined) {
+			alert('성별을 체크해주세요')
+			return;
+		}
+
+
+		let hobby = document.getElementsByName('hobby');
+		let hobby_val = '';
+
+		hobby.forEach((a) => {
+			if (a.checked) {
+				hobby_val += a.value + '|'
+			}
+		});
+
+
+
+
+		alert('회원가입 성공');
+
+
+	});
+</script>
+
+</html>
