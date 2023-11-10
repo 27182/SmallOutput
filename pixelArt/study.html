@@ -193,14 +193,14 @@
 		}
 
 		.forsave {
-			padding: 10px 35px;
+			padding: 10px 40px; 
 			font-size: 15px;
-			color: black;
+			color: #4C5270;
 			font-weight: bold;
-			margin: 5px 20px;
+			margin: 5px 15px;
 			margin-top: 15px;
-			border-radius: 25px;
-			border: 3px solid black;
+			border-radius: 30px;
+			border: 3px solid #BCECE0;
 			cursor: pointer;
 		}
 
@@ -325,14 +325,14 @@
 	</div>
 	<div id="modalContainer" class="hidden">
 		<div id="modalContent"
-			style="display: flex; flex-direction: column; align-items: center; border: 5px aquamarine solid;">
+			style="display: flex; flex-direction: column; align-items: center; border: 5px #BCECE0 solid;">
 			<div
-				style="font-family:sans-serif cursive;font-style: italic; font-size: 40px; font-weight: bold; color: black; ">
+				style="font-family:sans-serif cursive;font-style: italic; font-size: 40px; font-weight: bold; color: #4C5270;  ">
 				Save As
 			</div>
 			<div style="font-style: italic;">
 				<input type="text" id="savename" value="" placeholder="image"
-					style="outline: none; text-align: center; border: 2px solid black; width: 100px; margin-top: 5px; margin-right: 3px; border-radius: 5px;">.png
+					style="outline: none; text-align: center; border: 2px solid #4C5270; width: 100px; margin-top: 5px; margin-right: 3px; border-radius: 5px;">.png
 			</div>
 			<div>
 				<button id="realsave" class="forsave">YES</button>
@@ -1496,6 +1496,19 @@
 </script>
 <script>
 	$('body').hide(0).show('blind',1000);
+</script>
+<script>
+	let isCrtl
+	document.onkeyup = function(e){
+		if(e.which == 17) isCtrl = false;
+	}
+	
+	document.onkeydown = function(e){
+		if(e.which == 17) isCrtl = true;
+		if(e.which == 90 && isCrtl== true){
+			document.getElementById('undo').click();
+		}
+	}
 </script>
 
 
