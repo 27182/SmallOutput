@@ -193,7 +193,7 @@
 		}
 
 		.forsave {
-			padding: 10px 40px; 
+			padding: 10px 40px;
 			font-size: 15px;
 			color: #4C5270;
 			font-weight: bold;
@@ -238,7 +238,7 @@
 			border-radius: 25px;
 			cursor: pointer;
 		}
-		
+
 		#sampl2 {
 			margin-left: 3px;
 			font-weight: 550;
@@ -248,7 +248,7 @@
 			border-radius: 25px;
 			cursor: pointer;
 		}
-		
+
 		#trash {
 			margin-left: 60px;
 			width: 50px;
@@ -259,7 +259,7 @@
 			background-size: cover;
 			cursor: pointer;
 		}
-		
+
 		.line {
 			margin-left: 50px;
 			width: 50px;
@@ -270,16 +270,16 @@
 			background-size: cover;
 			z-index: -1;
 		}
-		
+
 		#line {
 			margin-left: 5px;
 			width: 35px;
 			height: 35px;
-			
+
 		}
 	</style>
 	<script>
-		
+
 	</script>
 </head>
 
@@ -313,7 +313,7 @@
 			<span style="margin-right: 8px;">
 				SIZE:
 				<button class="size" data-num="16">16x16</button>
-				<button id ="sizebt2" class="size" data-num="32">32x32</button>
+				<button id="sizebt2" class="size" data-num="32">32x32</button>
 				<button class="size" data-num="64">64x64</button>
 			</span>
 			BORDER:
@@ -343,7 +343,7 @@
 
 </body>
 <script>
-	function del(){
+	function del() {
 		let tttttdddddssss = $('td').get();
 		tttttdddddssss.forEach((a) => a.style.backgroundColor = 'rgb(255,255,255)');
 	}
@@ -376,6 +376,9 @@
 		a.style.backgroundColor = 'rgb(255,255,255)';
 		a.addEventListener('mouseover', function (e) {
 			if (draw == 1) {
+				if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+					return;
+				}
 				let ab = [this.style.backgroundColor, this.id];
 				this.style.backgroundColor = document.getElementById('color').value;
 				arr.push(ab);
@@ -390,6 +393,9 @@
 				toggle = false;
 				document.getElementById('pipe').style.border = 'none'
 				document.getElementById('pipe').style.backgroundColor = 'white';
+				return;
+			}
+			if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
 				return;
 			}
 			let ab = [this.style.backgroundColor, this.id];
@@ -414,8 +420,8 @@
 					$(`#tr${i}`).append(`<td id=td${i}_${j}></td>`);
 				}
 			}
-			
-			
+
+
 
 			document.getElementsByTagName('table')[0].addEventListener('mousedown', function () {
 				draw = 1;
@@ -429,6 +435,9 @@
 				a.style.backgroundColor = 'rgb(255,255,255)';
 				a.addEventListener('mouseover', function (e) {
 					if (draw == 1) {
+						if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+							return;
+						}
 						let ab = [this.style.backgroundColor, this.id];
 						this.style.backgroundColor = document.getElementById('color').value;
 						arr.push(ab);
@@ -445,12 +454,15 @@
 						document.getElementById('pipe').style.backgroundColor = 'white';
 						return;
 					}
+					if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+						return;
+					}
 					let ab = [this.style.backgroundColor, this.id];
 					this.style.backgroundColor = document.getElementById('color').value;
 					arr.push(ab);
 				})
 			});
-			
+
 
 			$('#tablewrap').css('zoom', size == 16 ? 4 : size == 32 ? 2 : 1);
 		})
@@ -521,7 +533,7 @@
 <script type="text/javascript">
 
 	function rgbToHex(rgbType) {
-	
+
 		var rgb = rgbType.replace(/[^%,.\d]/g, "").split(",");
 
 		rgb.forEach(function (str, x, arr) {
@@ -557,8 +569,8 @@
 </script>
 <script>
 	function ps() {
-		if(document.getElementById('td18_18')== null){			
-		document.getElementById('sizebt2').click();
+		if (document.getElementById('td18_18') == null) {
+			document.getElementById('sizebt2').click();
 		}
 		let psyd = [[3, 21, 'b'],
 		[3, 22, 'b'],
@@ -1469,9 +1481,9 @@
 			}
 			return tt;
 		}
-		
-		
-		
+
+
+
 		mari.forEach((a) => {document.getElementById(`td${a[0]}_${a[1]}`).style.backgroundColor = dcdclr(a)});
 	}
 </script>
@@ -1495,17 +1507,17 @@
 	}
 </script>
 <script>
-	$('body').hide(0).show('blind',1000);
+	$('body').hide(0).show('blind', 600);
 </script>
 <script>
 	let isCrtl
-	document.onkeyup = function(e){
-		if(e.which == 17) isCtrl = false;
+	document.onkeyup = function (e) {
+		if (e.which == 17) isCtrl = false;
 	}
-	
-	document.onkeydown = function(e){
-		if(e.which == 17) isCrtl = true;
-		if(e.which == 90 && isCrtl== true){
+
+	document.onkeydown = function (e) {
+		if (e.which == 17) isCrtl = true;
+		if (e.which == 90 && isCrtl == true) {
 			document.getElementById('undo').click();
 		}
 	}
