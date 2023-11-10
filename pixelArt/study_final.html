@@ -1,0 +1,1549 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<title>Pixel Art</title>
+	<link rel="icon" href="./p.png" type="image/x-icon">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
+	<script src="./psy.js"></script>
+	<!--<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>-->
+
+	<style>
+		* {
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		}
+
+		#tempwrap {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		#tmwr {
+			align-items: center;
+			justify-content: center;
+		}
+
+
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			margin: 0;
+		}
+
+		div {
+			margin: 0;
+		}
+
+		table {
+			border-collapse: collapse;
+		}
+
+		td {
+			margin: 0;
+			padding: 0;
+			border: 1px solid;
+			height: 10px;
+			width: 10px;
+			background-color: white;
+		}
+
+		.sideNav {
+			font-weight: bolder;
+			height: 200px;
+			width: 100%;
+			background-color: rgb(255, 255, 255);
+			position: fixed;
+			bottom: 0;
+			padding-top: 5px;
+			text-align: center;
+			align-items: center;
+			font-size: 25px;
+		}
+
+		#color {
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+			width: 70px;
+			height: 70px;
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+		}
+
+		#color::-webkit-color-swatch {
+			border-radius: 15px;
+			border: 3px solid;
+		}
+
+		#color::-moz-color-swatch {
+			border-radius: 15px;
+			border: 3px solid;
+		}
+
+		.size {
+			font-weight: 550;
+			font-size: 20px;
+			padding: 7px 20px;
+			border: solid 3px;
+			border-radius: 25px;
+			cursor: pointer;
+		}
+
+		#tablewrap {
+			zoom: 1;
+		}
+
+		#zoomin {
+			width: 50px;
+			height: 50px;
+			border: none;
+			margin-right: 40px;
+			background-repeat: no-repeat;
+			background-image: url(./zoomin.png);
+			background-size: cover;
+			cursor: pointer;
+		}
+
+		#zoomout {
+			width: 50px;
+			height: 50px;
+			border: none;
+			background-repeat: no-repeat;
+			background-image: url(./zoomout.png);
+			background-size: cover;
+			cursor: pointer;
+		}
+
+
+		input[type='range'] {
+			height: 13px;
+			-webkit-appearance: none;
+			width: 170px;
+			background-color: #F1F0EC;
+			margin-top: 7px;
+			border-radius: 25px;
+			border: 1px solid #1F2247;
+			appearance: none;
+			outline: none !important;
+			cursor: pointer;
+
+		}
+
+		/*input[type='range']::-webkit-slider-runnable-track {
+			height: 15px;
+			color: #4B0083;
+		}*/
+
+		input[type='range']::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			border: #1F2247 3px solid !important;
+			background-color: #1F2247;
+			cursor: pointer;
+			appearance: none;
+			z-index: 999;
+		}
+
+		#btnSave {
+			margin-left: 50px;
+			height: 50px;
+			width: 50px;
+			background: url('./floppy-disk.png');
+			background-size: cover;
+			background-repeat: no-repeat;
+			border: none;
+			cursor: pointer;
+		}
+
+		#modalContainer {
+			width: 100%;
+			height: 100%;
+			position: fixed;
+			top: 0;
+			left: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background: rgba(0, 0, 0, 0.5);
+		}
+
+		#modalContent {
+			position: absolute;
+			background-color: #ffffff;
+			width: 300px;
+			height: 150px;
+			padding: 5px;
+			border-radius: 25px;
+
+		}
+
+		#modalContainer.hidden {
+			display: none;
+		}
+
+		.forsave {
+			padding: 10px 40px;
+			font-size: 15px;
+			color: #4C5270;
+			font-weight: bold;
+			margin: 5px 15px;
+			margin-top: 15px;
+			border-radius: 30px;
+			border: 3px solid #BCECE0;
+			cursor: pointer;
+		}
+
+		#pipe {
+			margin-left: 33px;
+			height: 60px;
+			width: 60px;
+			background: url('./eyedropper.png');
+			background-size: cover;
+			background-repeat: no-repeat;
+			border: none;
+			cursor: pointer;
+			margin-right: 0px;
+			border-radius: 10px;
+
+		}
+
+		#undo {
+			margin-left: 33px;
+			width: 50px;
+			height: 50px;
+			border: none;
+			background-repeat: no-repeat;
+			background-image: url(./undo-circular-arrow.png);
+			background-size: cover;
+			cursor: pointer;
+		}
+
+		#sampl {
+			margin-left: 3px;
+			font-weight: 550;
+			font-size: 17px;
+			padding: 7px 20px;
+			border: solid 3px;
+			border-radius: 25px;
+			cursor: pointer;
+		}
+
+		#sampl2 {
+			margin-left: 3px;
+			font-weight: 550;
+			font-size: 17px;
+			padding: 7px 20px;
+			border: solid 3px;
+			border-radius: 25px;
+			cursor: pointer;
+		}
+
+		#trash {
+			margin-left: 60px;
+			width: 50px;
+			height: 50px;
+			border: none;
+			background-repeat: no-repeat;
+			background-image: url(./trash.png);
+			background-size: cover;
+			cursor: pointer;
+		}
+
+		.line {
+			margin-left: 50px;
+			width: 50px;
+			height: 50px;
+			border: none;
+			background-repeat: no-repeat;
+			background-image: url(./vertical-line.png);
+			background-size: cover;
+			z-index: -1;
+		}
+
+		#line {
+			margin-left: 5px;
+			width: 35px;
+			height: 35px;
+
+		}
+	</style>
+	<script>
+
+	</script>
+</head>
+
+<body>
+
+	<div
+		style="margin:0; display:flex; flex-direction: column; align-items: center; height: 720px; width: 100%; overflow: auto;">
+		<span id="tablewrap" style="display: inline-block;">
+			<table>
+
+			</table>
+		</span>
+	</div>
+
+	<div class="sideNav">
+		<hr width="100%" style="background-color: aquamarine; border: 1px solid aquamarine; height: 1px;">
+		<div id="tempwrap">
+			<span id="tmwr">
+				COLOR:
+			</span>
+			<input type="color" id="color" style="margin-left: 8px;" />
+			<button id="pipe"></button>
+			<button id="undo"></button>　　
+			<button class="zoom" id="zoomin"></button>
+			<button class="zoom" id="zoomout"></button>
+			<span class="line"></span>
+			<button id="btnSave"></button>
+			<button id="trash" onclick="del()"></button>
+		</div>
+		<div style="margin-top: 10px;">
+			<span style="margin-right: 8px;">
+				SIZE:
+				<button class="size" data-num="16">16x16</button>
+				<button id="sizebt2" class="size" data-num="32">32x32</button>
+				<button class="size" data-num="64">64x64</button>
+			</span>
+			BORDER:
+			<input type="range" min="0" max="100" value="100" class="slider" id="myRange">
+			<span id="line" style="display: inline-block;"></span>
+			<button onclick="ma()" id="sampl">SAMPLE1</button>
+			<button onclick="ps()" id="sampl2">SAMPLE2</button>
+		</div>
+	</div>
+	<div id="modalContainer" class="hidden">
+		<div id="modalContent"
+			style="display: flex; flex-direction: column; align-items: center; border: 5px #BCECE0 solid;">
+			<div
+				style="font-family:sans-serif cursive;font-style: italic; font-size: 40px; font-weight: bold; color: #4C5270;  ">
+				Save As
+			</div>
+			<div style="font-style: italic;">
+				<input type="text" id="savename" value="" placeholder="image"
+					style="outline: none; text-align: center; border: 2px solid #4C5270; width: 100px; margin-top: 5px; margin-right: 3px; border-radius: 5px;">.png
+			</div>
+			<div>
+				<button id="realsave" class="forsave">YES</button>
+				<button id="modalCloseButton" class="forsave">NO</button>
+			</div>
+		</div>
+	</div>
+
+</body>
+<script>
+	function del() {
+		let tttttdddddssss = $('td').get();
+		tttttdddddssss.forEach((a) => a.style.backgroundColor = 'rgb(255,255,255)');
+	}
+</script>
+<script>
+	document.getElementById('myRange').addEventListener('input', () => {
+		let tds = $('td').get();
+		tds.forEach((c) => {c.style.border = `1px solid rgba(0,0,0,${document.getElementById('myRange').value / 100})`});
+	});
+	let zoom = 1;
+	$('#zoomin').on('click', () => {zoom = Number($('#tablewrap').css('zoom')); zoom += 0.1; $('#tablewrap').css('zoom', zoom)});
+	$('#zoomout').on('click', () => {zoom = Number($('#tablewrap').css('zoom')); zoom -= 0.1; $('#tablewrap').css('zoom', zoom)});
+	for (i = 1; i <= 16; i++) {
+		$('table').append('<tr id=tr' + i + '></tr>');
+		for (j = 1; j <= 16; j++) {
+			$(`#tr${i}`).append(`<td id=td${i}_${j}></td>`);
+		}
+	}
+	let draw = 0;
+
+	document.getElementsByTagName('table')[0].addEventListener('mousedown', function () {
+		draw = 1;
+	});
+	window.addEventListener('mouseup', function () {
+		draw = 0;
+	});
+
+	let td = $('td').get();
+	td.forEach((a) => {
+		a.style.backgroundColor = 'rgb(255,255,255)';
+		a.addEventListener('mouseover', function (e) {
+			if (draw == 1) {
+				if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+					return;
+				}
+				let ab = [this.style.backgroundColor, this.id];
+				this.style.backgroundColor = document.getElementById('color').value;
+				arr.push(ab);
+			}
+		})
+	});
+
+	td.forEach((a) => {
+		a.addEventListener('click', function (e) {
+			if (toggle) {
+				document.getElementById('color').value = rgbToHex(this.style.backgroundColor);
+				toggle = false;
+				document.getElementById('pipe').style.border = 'none'
+				document.getElementById('pipe').style.backgroundColor = 'white';
+				return;
+			}
+			if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+				return;
+			}
+			let ab = [this.style.backgroundColor, this.id];
+			this.style.backgroundColor = document.getElementById('color').value;
+			arr.push(ab);
+
+		})
+	});
+
+	$('#tablewrap').css('zoom', 4);
+
+	let sizebtn = $('.size').get();
+	let size = 0;
+	sizebtn.forEach((b) => {
+		b.addEventListener('click', function (e) {
+			size = this.dataset.num;
+			$('table').remove();
+			$('#tablewrap').append('<table></table>')
+			for (i = 1; i <= size; i++) {
+				$('table').append('<tr id=tr' + i + '></tr>');
+				for (j = 1; j <= size; j++) {
+					$(`#tr${i}`).append(`<td id=td${i}_${j}></td>`);
+				}
+			}
+
+
+
+			document.getElementsByTagName('table')[0].addEventListener('mousedown', function () {
+				draw = 1;
+			});
+			document.getElementsByTagName('body')[0].addEventListener('mouseup', function () {
+				draw = 0;
+			});
+
+			let td = $('td').get();
+			td.forEach((a) => {
+				a.style.backgroundColor = 'rgb(255,255,255)';
+				a.addEventListener('mouseover', function (e) {
+					if (draw == 1) {
+						if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+							return;
+						}
+						let ab = [this.style.backgroundColor, this.id];
+						this.style.backgroundColor = document.getElementById('color').value;
+						arr.push(ab);
+					}
+				})
+			});
+
+			td.forEach((a) => {
+				a.addEventListener('click', function (e) {
+					if (toggle) {
+						document.getElementById('color').value = rgbToHex(this.style.backgroundColor);
+						toggle = false;
+						document.getElementById('pipe').style.border = 'none'
+						document.getElementById('pipe').style.backgroundColor = 'white';
+						return;
+					}
+					if (rgbToHex(this.style.backgroundColor) == document.getElementById('color').value) {
+						return;
+					}
+					let ab = [this.style.backgroundColor, this.id];
+					this.style.backgroundColor = document.getElementById('color').value;
+					arr.push(ab);
+				})
+			});
+
+
+			$('#tablewrap').css('zoom', size == 16 ? 4 : size == 32 ? 2 : 1);
+		})
+	}
+	);
+
+	$(function () {
+		$("#slider").slider();
+	});
+
+
+
+</script>
+<script>
+
+	$("#realsave").on('click', function DownloadAsImage() {
+		var element = $("#tablewrap")[0];
+		html2canvas(element, {scale: 2}).then(function (canvas) {
+			var myImage = canvas.toDataURL();
+			downloadURI(myImage, "image.png");
+		});
+	})
+
+
+
+	function downloadURI(uri, name) {
+		var link = document.createElement("a");
+
+		link.download = document.getElementById('savename').value == '' ? "image" : document.getElementById('savename').value;
+		link.href = uri;
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		modal.classList.add('hidden');
+	}
+
+</script>
+<script>
+	const modalOpenButton = document.getElementById('btnSave');
+	const modal = document.getElementById('modalContainer');
+
+	modalOpenButton.addEventListener('click', () => {
+		modal.classList.remove('hidden');
+		document.getElementById('savename').focus();
+	});
+
+	modalCloseButton.addEventListener('click', () => {
+		modal.classList.add('hidden');
+	});
+</script>
+
+<script>
+	let toggle = false;
+	document.getElementById('pipe').addEventListener('click', function toggling() {
+		if (toggle) {
+			toggle = false;
+			document.getElementById('pipe').style.border = 'none'
+			document.getElementById('pipe').style.backgroundColor = 'white';
+		} else {
+			toggle = true;
+			document.getElementById('pipe').style.border = '2px solid rgb(185,185,185)';
+			document.getElementById('pipe').style.backgroundColor = 'rgb(185,185,185)';
+		}
+
+	})
+</script>
+
+<script type="text/javascript">
+
+	function rgbToHex(rgbType) {
+
+		var rgb = rgbType.replace(/[^%,.\d]/g, "").split(",");
+
+		rgb.forEach(function (str, x, arr) {
+
+			if (str.indexOf("%") > -1) str = Math.round(parseFloat(str) * 2.55);
+
+			str = parseInt(str, 10).toString(16);
+			if (str.length === 1) str = "0" + str;
+
+			arr[x] = str;
+		});
+
+		return "#" + rgb.join("");
+	} 
+</script>
+
+<script>
+	let arr = [];
+</script>
+<script>
+	document.getElementById('undo').addEventListener("click", function () {
+		let tmp = arr.pop();
+		if (tmp != undefined) {
+			document.getElementById(tmp[1]).style.backgroundColor = tmp[0];
+		}
+	});
+</script>
+<script>
+	/*	$('body').append(
+		`<div id="intro" style="width:100vw; height:100vh ;background-color: aquamarine; z-index: -1; display:flex; flex-direction: column; justify-content:center; align-items:center" ></div>`);
+		$('#intro').append('<button style="padding: 15px 40px; border-radius: 25px; font-style: italic;border = 1px solid hotpink; font-size: 25px; background-color: hotpink;">Start!</button');
+	*/
+</script>
+<script>
+	function ps() {
+		if (document.getElementById('td18_18') == null) {
+			document.getElementById('sizebt2').click();
+		}
+		let psyd = [[3, 21, 'b'],
+		[3, 22, 'b'],
+		[3, 24, 'b'],
+		[3, 25, 'b'],
+		[3, 28, 'b'],
+		[4, 22, 'b'],
+		[4, 24, 'b'],
+		[4, 25, 'b'],
+		[4, 27, 'b'],
+		[4, 28, 'b'],
+		[5, 13, 'b'],
+		[5, 14, 'b'],
+		[5, 15, 'b'],
+		[5, 16, 'b'],
+		[5, 17, 'b'],
+		[5, 18, 'b'],
+		[5, 19, 'b'],
+		[5, 20, 'b'],
+		[5, 22, 'b'],
+		[5, 23, 'b'],
+		[5, 24, 'b'],
+		[5, 26, 'b'],
+		[5, 27, 'b'],
+		[6, 8, 'b'],
+		[6, 9, 'b'],
+		[6, 11, 'b'],
+		[6, 12, 'b'],
+		[6, 13, 'y'],
+		[6, 14, 'y'],
+		[6, 15, 'y'],
+		[6, 16, 'y'],
+		[6, 17, 'y'],
+		[6, 18, 'y'],
+		[6, 19, 'y'],
+		[6, 20, 'y'],
+		[6, 21, 'b'],
+		[6, 22, 'b'],
+		[6, 23, 'b'],
+		[6, 25, 'b'],
+		[6, 26, 'b'],
+		[7, 7, 'b'],
+		[7, 8, 'y'],
+		[7, 9, 'y'],
+		[7, 10, 'b'],
+		[7, 11, 'y'],
+		[7, 12, 'y'],
+		[7, 13, 'y'],
+		[7, 14, 'y'],
+		[7, 15, 'y'],
+		[7, 16, 'y'],
+		[7, 17, 'y'],
+		[7, 18, 'y'],
+		[7, 19, 'y'],
+		[7, 20, 'y'],
+		[7, 21, 'y'],
+		[7, 22, 'y'],
+		[7, 23, 'b'],
+		[7, 24, 'b'],
+		[7, 25, 'b'],
+		[8, 5, 'b'],
+		[8, 6, 'b'],
+		[8, 7, 'y'],
+		[8, 8, 'y'],
+		[8, 9, 'b'],
+		[8, 10, 'y'],
+		[8, 11, 'y'],
+		[8, 12, 'y'],
+		[8, 13, 'y'],
+		[8, 14, 'y'],
+		[8, 15, 'y'],
+		[8, 16, 'y'],
+		[8, 17, 'y'],
+		[8, 18, 'y'],
+		[8, 19, 'y'],
+		[8, 20, 'y'],
+		[8, 21, 'y'],
+		[8, 22, 'y'],
+		[8, 23, 'y'],
+		[8, 24, 'y'],
+		[8, 25, 'b'],
+		[9, 4, 'b'],
+		[9, 5, 'y'],
+		[9, 6, 'y'],
+		[9, 7, 'y'],
+		[9, 8, 'b'],
+		[9, 9, 'y'],
+		[9, 10, 'y'],
+		[9, 11, 'y'],
+		[9, 12, 'y'],
+		[9, 13, 'y'],
+		[9, 14, 'y'],
+		[9, 15, 'y'],
+		[9, 16, 'y'],
+		[9, 17, 'y'],
+		[9, 18, 'y'],
+		[9, 19, 'y'],
+		[9, 20, 'y'],
+		[9, 21, 'y'],
+		[9, 22, 'y'],
+		[9, 23, 'y'],
+		[9, 24, 'y'],
+		[9, 25, 'y'],
+		[9, 26, 'b'],
+		[10, 3, 'b'],
+		[10, 4, 'y'],
+		[10, 5, 'y'],
+		[10, 6, 'y'],
+		[10, 7, 'b'],
+		[10, 8, 'y'],
+		[10, 9, 'y'],
+		[10, 10, 'y'],
+		[10, 11, 'y'],
+		[10, 12, 'y'],
+		[10, 13, 'y'],
+		[10, 14, 'y'],
+		[10, 15, 'y'],
+		[10, 16, 'y'],
+		[10, 17, 'y'],
+		[10, 18, 'y'],
+		[10, 19, 'y'],
+		[10, 20, 'y'],
+		[10, 21, 'y'],
+		[10, 22, 'y'],
+		[10, 23, 'y'],
+		[10, 24, 'y'],
+		[10, 25, 'y'],
+		[10, 26, 'b'],
+		[11, 3, 'b'],
+		[11, 4, 'y'],
+		[11, 5, 'y'],
+		[11, 6, 'y'],
+		[11, 7, 'b'],
+		[11, 8, 'b'],
+		[11, 9, 'b'],
+		[11, 10, 'b'],
+		[11, 11, 'y'],
+		[11, 12, 'y'],
+		[11, 13, 'y'],
+		[11, 14, 'y'],
+		[11, 15, 'y'],
+		[11, 16, 'y'],
+		[11, 17, 'y'],
+		[11, 18, 'y'],
+		[11, 19, 'y'],
+		[11, 20, 'y'],
+		[11, 21, 'y'],
+		[11, 22, 'y'],
+		[11, 23, 'y'],
+		[11, 24, 'y'],
+		[11, 25, 'y'],
+		[11, 26, 'y'],
+		[11, 27, 'b'],
+		[12, 2, 'b'],
+		[12, 3, 'y'],
+		[12, 4, 'y'],
+		[12, 5, 'y'],
+		[12, 6, 'y'],
+		[12, 7, 'b'],
+		[12, 8, 'w'],
+		[12, 9, 'w'],
+		[12, 10, 'w'],
+		[12, 11, 'b'],
+		[12, 12, 'y'],
+		[12, 13, 'y'],
+		[12, 14, 'y'],
+		[12, 15, 'y'],
+		[12, 16, 'y'],
+		[12, 17, 'y'],
+		[12, 18, 'y'],
+		[12, 19, 'b'],
+		[12, 20, 'b'],
+		[12, 21, 'b'],
+		[12, 22, 'y'],
+		[12, 23, 'y'],
+		[12, 24, 'y'],
+		[12, 25, 'y'],
+		[12, 26, 'y'],
+		[12, 27, 'b'],
+		[13, 2, 'b'],
+		[13, 3, 'y'],
+		[13, 4, 'y'],
+		[13, 5, 'y'],
+		[13, 6, 'b'],
+		[13, 7, 'w'],
+		[13, 8, 'w'],
+		[13, 9, 'b'],
+		[13, 10, 'w'],
+		[13, 11, 'g'],
+		[13, 12, 'b'],
+		[13, 13, 'y'],
+		[13, 14, 'y'],
+		[13, 15, 'y'],
+		[13, 16, 'y'],
+		[13, 17, 'y'],
+		[13, 18, 'b'],
+		[13, 19, 'w'],
+		[13, 20, 'w'],
+		[13, 21, 'w'],
+		[13, 22, 'b'],
+		[13, 23, 'y'],
+		[13, 24, 'y'],
+		[13, 25, 'y'],
+		[13, 26, 'y'],
+		[13, 27, 'y'],
+		[13, 28, 'b'],
+		[14, 1, 'b'],
+		[14, 2, 'y'],
+		[14, 3, 'y'],
+		[14, 4, 'y'],
+		[14, 5, 'y'],
+		[14, 6, 'b'],
+		[14, 7, 'w'],
+		[14, 8, 'w'],
+		[14, 9, 'w'],
+		[14, 10, 'w'],
+		[14, 11, 'g'],
+		[14, 12, 'b'],
+		[14, 13, 'y'],
+		[14, 14, 'y'],
+		[14, 15, 'y'],
+		[14, 16, 'y'],
+		[14, 17, 'b'],
+		[14, 18, 'w'],
+		[14, 19, 'w'],
+		[14, 20, 'b'],
+		[14, 21, 'w'],
+		[14, 22, 'g'],
+		[14, 23, 'b'],
+		[14, 24, 'y'],
+		[14, 25, 'y'],
+		[14, 26, 'y'],
+		[14, 27, 'y'],
+		[14, 28, 'b'],
+		[14, 29, 'b'],
+		[15, 1, 'b'],
+		[15, 2, 'y'],
+		[15, 3, 'y'],
+		[15, 4, 'y'],
+		[15, 5, 'y'],
+		[15, 6, 'b'],
+		[15, 7, 'b'],
+		[15, 8, 'w'],
+		[15, 9, 'w'],
+		[15, 10, 'g'],
+		[15, 11, 'b'],
+		[15, 12, 'b'],
+		[15, 13, 'b'],
+		[15, 14, 'b'],
+		[15, 15, 'y'],
+		[15, 16, 'y'],
+		[15, 17, 'b'],
+		[15, 18, 'w'],
+		[15, 19, 'w'],
+		[15, 20, 'w'],
+		[15, 21, 'w'],
+		[15, 22, 'g'],
+		[15, 23, 'b'],
+		[15, 24, 'y'],
+		[15, 25, 'y'],
+		[15, 26, 'y'],
+		[15, 27, 'b'],
+		[15, 28, 'b'],
+		[15, 29, 'y'],
+		[15, 30, 'b'],
+		[16, 1, 'b'],
+		[16, 2, 'y'],
+		[16, 3, 'y'],
+		[16, 4, 'y'],
+		[16, 5, 'y'],
+		[16, 6, 'b'],
+		[16, 7, 'y'],
+		[16, 8, 'b'],
+		[16, 9, 'b'],
+		[16, 10, 'b'],
+		[16, 11, 'b'],
+		[16, 12, 'f'],
+		[16, 13, 'f'],
+		[16, 14, 'f'],
+		[16, 15, 'b'],
+		[16, 16, 'y'],
+		[16, 17, 'y'],
+		[16, 18, 'b'],
+		[16, 19, 'w'],
+		[16, 20, 'w'],
+		[16, 21, 'g'],
+		[16, 22, 'b'],
+		[16, 23, 'y'],
+		[16, 24, 'y'],
+		[16, 25, 'b'],
+		[16, 26, 'b'],
+		[16, 27, 'y'],
+		[16, 28, 'b'],
+		[16, 29, 'y'],
+		[16, 30, 'b'],
+		[17, 1, 'b'],
+		[17, 2, 'o'],
+		[17, 3, 'y'],
+		[17, 4, 'y'],
+		[17, 5, 'y'],
+		[17, 6, 'b'],
+		[17, 7, 'y'],
+		[17, 8, 'b'],
+		[17, 9, 'f'],
+		[17, 10, 'f'],
+		[17, 11, 'f'],
+		[17, 12, 'f'],
+		[17, 13, 'f'],
+		[17, 14, 'f'],
+		[17, 15, 'f'],
+		[17, 16, 'b'],
+		[17, 17, 'b'],
+		[17, 18, 'y'],
+		[17, 19, 'b'],
+		[17, 20, 'b'],
+		[17, 21, 'b'],
+		[17, 22, 'y'],
+		[17, 23, 'y'],
+		[17, 24, 'b'],
+		[17, 25, 'y'],
+		[17, 26, 'b'],
+		[17, 27, 'y'],
+		[17, 28, 'y'],
+		[17, 29, 'y'],
+		[17, 30, 'b'],
+		[18, 1, 'b'],
+		[18, 2, 'o'],
+		[18, 3, 'o'],
+		[18, 4, 'o'],
+		[18, 5, 'o'],
+		[18, 6, 'b'],
+		[18, 7, 'b'],
+		[18, 8, 'f'],
+		[18, 9, 'f'],
+		[18, 10, 'b'],
+		[18, 11, 'f'],
+		[18, 12, 'f'],
+		[18, 13, 'f'],
+		[18, 14, 'b'],
+		[18, 15, 'f'],
+		[18, 16, 'f'],
+		[18, 17, 'f'],
+		[18, 18, 'b'],
+		[18, 19, 'b'],
+		[18, 20, 'y'],
+		[18, 21, 'y'],
+		[18, 22, 'y'],
+		[18, 23, 'y'],
+		[18, 24, 'b'],
+		[18, 25, 'y'],
+		[18, 26, 'b'],
+		[18, 27, 'y'],
+		[18, 28, 'y'],
+		[18, 29, 'y'],
+		[18, 30, 'o'],
+		[18, 31, 'b'],
+		[19, 2, 'b'],
+		[19, 3, 'o'],
+		[19, 4, 'o'],
+		[19, 5, 'b'],
+		[19, 6, 'b'],
+		[19, 7, 'f'],
+		[19, 8, 'f'],
+		[19, 9, 'f'],
+		[19, 10, 'f'],
+		[19, 11, 'f'],
+		[19, 12, 'f'],
+		[19, 13, 'f'],
+		[19, 14, 'f'],
+		[19, 15, 'f'],
+		[19, 16, 'f'],
+		[19, 17, 'f'],
+		[19, 18, 'f'],
+		[19, 19, 'f'],
+		[19, 20, 'b'],
+		[19, 21, 'o'],
+		[19, 22, 'o'],
+		[19, 23, 'o'],
+		[19, 24, 'b'],
+		[19, 25, 'y'],
+		[19, 26, 'y'],
+		[19, 27, 'y'],
+		[19, 28, 'y'],
+		[19, 29, 'y'],
+		[19, 30, 'o'],
+		[19, 31, 'b'],
+		[20, 3, 'b'],
+		[20, 4, 'b'],
+		[20, 5, 'f'],
+		[20, 6, 'f'],
+		[20, 7, 'f'],
+		[20, 8, 'f'],
+		[20, 9, 'f'],
+		[20, 10, 'f'],
+		[20, 11, 'f'],
+		[20, 12, 'f'],
+		[20, 13, 'f'],
+		[20, 14, 'f'],
+		[20, 15, 'f'],
+		[20, 16, 'f'],
+		[20, 17, 'f'],
+		[20, 18, 'f'],
+		[20, 19, 'b'],
+		[20, 20, 'o'],
+		[20, 21, 'o'],
+		[20, 22, 'o'],
+		[20, 23, 'b'],
+		[20, 24, 'o'],
+		[20, 25, 'y'],
+		[20, 26, 'y'],
+		[20, 27, 'y'],
+		[20, 28, 'y'],
+		[20, 29, 'y'],
+		[20, 30, 'o'],
+		[20, 31, 'b'],
+		[21, 3, 'b'],
+		[21, 4, 'f'],
+		[21, 5, 'f'],
+		[21, 6, 'f'],
+		[21, 7, 'f'],
+		[21, 8, 'f'],
+		[21, 9, 'f'],
+		[21, 10, 'f'],
+		[21, 11, 'f'],
+		[21, 12, 'f'],
+		[21, 13, 'f'],
+		[21, 14, 'f'],
+		[21, 15, 'f'],
+		[21, 16, 'f'],
+		[21, 17, 'f'],
+		[21, 18, 'b'],
+		[21, 19, 'o'],
+		[21, 20, 'o'],
+		[21, 21, 'o'],
+		[21, 22, 'b'],
+		[21, 23, 'b'],
+		[21, 24, 'y'],
+		[21, 25, 'y'],
+		[21, 26, 'y'],
+		[21, 27, 'y'],
+		[21, 28, 'y'],
+		[21, 29, 'o'],
+		[21, 30, 'o'],
+		[21, 31, 'o'],
+		[21, 32, 'b'],
+		[22, 3, 'b'],
+		[22, 4, 'f'],
+		[22, 5, 'f'],
+		[22, 6, 'f'],
+		[22, 7, 'f'],
+		[22, 8, 'f'],
+		[22, 9, 'f'],
+		[22, 10, 'f'],
+		[22, 11, 'f'],
+		[22, 12, 'f'],
+		[22, 13, 'f'],
+		[22, 14, 'f'],
+		[22, 15, 'f'],
+		[22, 16, 'f'],
+		[22, 17, 'f'],
+		[22, 18, 'b'],
+		[22, 19, 'b'],
+		[22, 20, 'b'],
+		[22, 21, 'b'],
+		[22, 22, 'o'],
+		[22, 23, 'b'],
+		[22, 24, 'o'],
+		[22, 25, 'y'],
+		[22, 26, 'y'],
+		[22, 27, 'y'],
+		[22, 28, 'y'],
+		[22, 29, 'o'],
+		[22, 30, 'o'],
+		[22, 31, 'o'],
+		[22, 32, 'b'],
+		[22, 3, 'b'],
+		[22, 4, 'f'],
+		[22, 5, 'f'],
+		[22, 6, 'f'],
+		[22, 7, 'f'],
+		[22, 8, 'f'],
+		[22, 9, 'f'],
+		[22, 10, 'f'],
+		[22, 11, 'f'],
+		[22, 12, 'f'],
+		[22, 13, 'f'],
+		[22, 14, 'f'],
+		[22, 15, 'f'],
+		[22, 16, 'f'],
+		[22, 17, 'f'],
+		[22, 18, 'b'],
+		[22, 19, 'b'],
+		[22, 20, 'b'],
+		[22, 21, 'b'],
+		[22, 22, 'o'],
+		[22, 23, 'b'],
+		[22, 24, 'o'],
+		[22, 25, 'o'],
+		[22, 26, 'y'],
+		[22, 27, 'y'],
+		[22, 28, 'y'],
+		[22, 29, 'o'],
+		[22, 30, 'o'],
+		[22, 31, 'o'],
+		[22, 32, 'b'],
+		[23, 3, 'b'],
+		[23, 4, 'f'],
+		[23, 5, 'f'],
+		[23, 6, 'f'],
+		[23, 7, 'f'],
+		[23, 8, 'f'],
+		[23, 9, 'f'],
+		[23, 10, 'f'],
+		[23, 11, 'f'],
+		[23, 12, 'f'],
+		[23, 13, 'f'],
+		[23, 14, 'f'],
+		[23, 15, 'f'],
+		[23, 16, 'f'],
+		[23, 17, 'b'],
+		[23, 18, 'o'],
+		[23, 19, 'o'],
+		[23, 20, 'o'],
+		[23, 21, 'o'],
+		[23, 22, 'o'],
+		[23, 23, 'b'],
+		[23, 24, 'o'],
+		[23, 25, 'o'],
+		[23, 26, 'y'],
+		[23, 27, 'y'],
+		[23, 28, 'y'],
+		[23, 29, 'o'],
+		[23, 30, 'o'],
+		[23, 31, 'o'],
+		[23, 32, 'b'],
+		[24, 4, 'b'],
+		[24, 5, 'f'],
+		[24, 6, 'f'],
+		[24, 7, 'f'],
+		[24, 8, 'f'],
+		[24, 9, 'f'],
+		[24, 10, 'f'],
+		[24, 11, 'f'],
+		[24, 12, 'f'],
+		[24, 13, 'f'],
+		[24, 14, 'f'],
+		[24, 15, 'f'],
+		[24, 16, 'f'],
+		[24, 17, 'b'],
+		[24, 18, 'o'],
+		[24, 19, 'o'],
+		[24, 20, 'o'],
+		[24, 21, 'o'],
+		[24, 22, 'o'],
+		[24, 23, 'b'],
+		[24, 24, 'o'],
+		[24, 25, 'o'],
+		[24, 26, 'o'],
+		[24, 27, 'o'],
+		[24, 28, 'o'],
+		[24, 29, 'o'],
+		[24, 30, 'o'],
+		[24, 31, 'o'],
+		[24, 32, 'b'],
+		[25, 5, 'b'],
+		[25, 6, 'b'],
+		[25, 7, 'f'],
+		[25, 8, 'f'],
+		[25, 9, 'f'],
+		[25, 10, 'f'],
+		[25, 11, 'f'],
+		[25, 12, 'f'],
+		[25, 13, 'f'],
+		[25, 14, 'f'],
+		[25, 15, 'f'],
+		[25, 16, 'b'],
+		[25, 17, 'o'],
+		[25, 18, 'o'],
+		[25, 19, 'o'],
+		[25, 20, 'o'],
+		[25, 21, 'o'],
+		[25, 22, 'o'],
+		[25, 23, 'o'],
+		[25, 24, 'o'],
+		[25, 25, 'o'],
+		[25, 26, 'o'],
+		[25, 27, 'o'],
+		[25, 28, 'o'],
+		[25, 29, 'o'],
+		[25, 30, 'o'],
+		[25, 31, 'o'],
+		[25, 32, 'b'],
+		[26, 4, 'b'],
+		[26, 5, 'y'],
+		[26, 6, 'y'],
+		[26, 7, 'b'],
+		[26, 8, 'b'],
+		[26, 9, 'f'],
+		[26, 10, 'f'],
+		[26, 11, 'f'],
+		[26, 12, 'f'],
+		[26, 13, 'f'],
+		[26, 14, 'b'],
+		[26, 15, 'b'],
+		[26, 16, 'o'],
+		[26, 17, 'o'],
+		[26, 18, 'o'],
+		[26, 19, 'o'],
+		[26, 20, 'o'],
+		[26, 21, 'o'],
+		[26, 22, 'o'],
+		[26, 23, 'o'],
+		[26, 24, 'o'],
+		[26, 25, 'o'],
+		[26, 26, 'o'],
+		[26, 27, 'o'],
+		[26, 28, 'o'],
+		[26, 29, 'o'],
+		[26, 30, 'o'],
+		[26, 31, 'o'],
+		[26, 32, 'b'],
+		[27, 4, 'b'],
+		[27, 5, 'y'],
+		[27, 6, 'y'],
+		[27, 7, 'y'],
+		[27, 8, 'y'],
+		[27, 9, 'b'],
+		[27, 10, 'b'],
+		[27, 11, 'b'],
+		[27, 12, 'b'],
+		[27, 13, 'b'],
+		[27, 14, 'o'],
+		[27, 15, 'o'],
+		[27, 16, 'o'],
+		[27, 17, 'o'],
+		[27, 18, 'o'],
+		[27, 19, 'o'],
+		[27, 20, 'o'],
+		[27, 21, 'o'],
+		[27, 22, 'o'],
+		[27, 23, 'o'],
+		[27, 24, 'o'],
+		[27, 25, 'o'],
+		[27, 26, 'o'],
+		[27, 27, 'o'],
+		[27, 28, 'o'],
+		[27, 29, 'o'],
+		[27, 30, 'o'],
+		[27, 31, 'b'],
+		[28, 3, 'b'],
+		[28, 4, 'y'],
+		[28, 5, 'y'],
+		[28, 6, 'y'],
+		[28, 7, 'y'],
+		[28, 8, 'y'],
+		[28, 9, 'y'],
+		[28, 10, 'y'],
+		[28, 11, 'y'],
+		[28, 12, 'y'],
+		[28, 13, 'y'],
+		[28, 14, 'o'],
+		[28, 15, 'o'],
+		[28, 16, 'o'],
+		[28, 17, 'o'],
+		[28, 18, 'o'],
+		[28, 19, 'o'],
+		[28, 20, 'o'],
+		[28, 21, 'o'],
+		[28, 22, 'o'],
+		[28, 23, 'o'],
+		[28, 24, 'o'],
+		[28, 25, 'o'],
+		[28, 26, 'o'],
+		[28, 27, 'o'],
+		[28, 28, 'o'],
+		[28, 29, 'b'],
+		[28, 30, 'b'],
+		[29, 3, 'b'],
+		[29, 4, 'y'],
+		[29, 5, 'y'],
+		[29, 6, 'y'],
+		[29, 7, 'y'],
+		[29, 8, 'y'],
+		[29, 9, 'y'],
+		[29, 10, 'y'],
+		[29, 11, 'y'],
+		[29, 12, 'y'],
+		[29, 13, 'y'],
+		[29, 14, 'y'],
+		[29, 15, 'y'],
+		[29, 16, 'o'],
+		[29, 17, 'o'],
+		[29, 18, 'o'],
+		[29, 19, 'o'],
+		[29, 20, 'o'],
+		[29, 21, 'o'],
+		[29, 22, 'o'],
+		[29, 23, 'o'],
+		[29, 24, 'o'],
+		[29, 25, 'o'],
+		[29, 26, 'b'],
+		[29, 27, 'b'],
+		[29, 28, 'b'],
+		[30, 2, 'b'],
+		[30, 3, 'y'],
+		[30, 4, 'y'],
+		[30, 5, 'y'],
+		[30, 6, 'y'],
+		[30, 7, 'y'],
+		[30, 8, 'y'],
+		[30, 9, 'y'],
+		[30, 10, 'y'],
+		[30, 11, 'y'],
+		[30, 12, 'y'],
+		[30, 13, 'y'],
+		[30, 14, 'y'],
+		[30, 15, 'y'],
+		[30, 16, 'y'],
+		[30, 17, 'o'],
+		[30, 18, 'o'],
+		[30, 19, 'o'],
+		[30, 20, 'o'],
+		[30, 21, 'o'],
+		[30, 22, 'o'],
+		[30, 23, 'o'],
+		[30, 24, 'o'],
+		[30, 25, 'o'],
+		[30, 26, 'o'],
+		[30, 27, 'o'],
+		[30, 28, 'b'],
+		[31, 2, 'b'],
+		[31, 3, 'y'],
+		[31, 4, 'y'],
+		[31, 5, 'y'],
+		[31, 6, 'y'],
+		[31, 7, 'y'],
+		[31, 8, 'y'],
+		[31, 9, 'y'],
+		[31, 10, 'y'],
+		[31, 11, 'y'],
+		[31, 12, 'y'],
+		[31, 13, 'y'],
+		[31, 14, 'y'],
+		[31, 15, 'y'],
+		[31, 16, 'y'],
+		[31, 17, 'y'],
+		[31, 18, 'y'],
+		[31, 19, 'o'],
+		[31, 20, 'o'],
+		[31, 21, 'o'],
+		[31, 22, 'o'],
+		[31, 23, 'o'],
+		[31, 24, 'o'],
+		[31, 25, 'o'],
+		[31, 26, 'o'],
+		[31, 27, 'o'],
+		[31, 28, 'b']];
+
+
+		psyd.forEach((a) => {document.getElementById(`td${a[0] + 1}_${a[1]}`).style.backgroundColor = decidecolor(a)});
+	}
+</script>
+<script>
+	function ma() {
+		let mari = [[1, 6, 'r'],
+		[1, 7, 'r'],
+		[1, 8, 'r'],
+		[1, 9, 'r'],
+		[1, 10, 'r'],
+		[2, 5, 'r'],
+		[2, 6, 'r'],
+		[2, 7, 'r'],
+		[2, 8, 'r'],
+		[2, 9, 'r'],
+		[2, 10, 'r'],
+		[2, 11, 'r'],
+		[2, 12, 'r'],
+		[3, 5, 't'],
+		[3, 6, 't'],
+		[3, 7, 't'],
+		[3, 8, 'f'],
+		[3, 9, 'b'],
+		[3, 10, 'f'],
+		[4, 4, 't'],
+		[4, 5, 'f'],
+		[4, 6, 't'],
+		[4, 7, 'f'],
+		[4, 8, 'f'],
+		[4, 9, 'b'],
+		[4, 10, 'f'],
+		[4, 11, 'f'],
+		[4, 12, 'f'],
+		[5, 4, 't'],
+		[5, 5, 'f'],
+		[5, 6, 't'],
+		[5, 7, 't'],
+		[5, 8, 'f'],
+		[5, 9, 'f'],
+		[5, 10, 't'],
+		[5, 11, 'f'],
+		[5, 12, 'f'],
+		[5, 13, 'f'],
+		[6, 4, 't'],
+		[6, 5, 't'],
+		[6, 6, 'f'],
+		[6, 7, 'f'],
+		[6, 8, 'f'],
+		[6, 9, 't'],
+		[6, 10, 't'],
+		[6, 11, 't'],
+		[6, 12, 't'],
+		[7, 6, 'f'],
+		[7, 7, 'f'],
+		[7, 8, 'f'],
+		[7, 9, 'f'],
+		[7, 10, 'f'],
+		[8, 5, 'r'],
+		[8, 6, 'r'],
+		[8, 7, 's'],
+		[8, 8, 'r'],
+		[8, 9, 's'],
+		[8, 10, 'r'],
+		[8, 11, 'r'],
+		[9, 4, 'r'],
+		[9, 5, 'r'],
+		[9, 6, 'r'],
+		[9, 7, 's'],
+		[9, 8, 'r'],
+		[9, 9, 's'],
+		[9, 10, 'r'],
+		[9, 11, 'r'],
+		[9, 12, 'r'],
+		[10, 3, 'r'],
+		[10, 4, 'r'],
+		[10, 5, 'r'],
+		[10, 6, 'r'],
+		[10, 7, 'y'],
+		[10, 8, 's'],
+		[10, 9, 'y'],
+		[10, 10, 'r'],
+		[10, 11, 'r'],
+		[10, 12, 'r'],
+		[10, 13, 'r'],
+		[11, 3, 'f'],
+		[11, 4, 'f'],
+		[11, 5, 'r'],
+		[11, 6, 's'],
+		[11, 7, 's'],
+		[11, 8, 's'],
+		[11, 9, 's'],
+		[11, 10, 's'],
+		[11, 11, 'r'],
+		[11, 12, 'f'],
+		[11, 13, 'f'],
+		[12, 3, 'f'],
+		[12, 4, 'f'],
+		[12, 5, 'f'],
+		[12, 6, 's'],
+		[12, 7, 's'],
+		[12, 8, 's'],
+		[12, 9, 's'],
+		[12, 10, 's'],
+		[12, 11, 'f'],
+		[12, 12, 'f'],
+		[12, 13, 'f'],
+		[13, 3, 'f'],
+		[13, 4, 'f'],
+		[13, 5, 's'],
+		[13, 6, 's'],
+		[13, 7, 's'],
+		[13, 8, 's'],
+		[13, 9, 's'],
+		[13, 10, 's'],
+		[13, 11, 's'],
+		[13, 12, 'f'],
+		[13, 13, 'f'],
+		[14, 5, 's'],
+		[14, 6, 's'],
+		[14, 7, 's'],
+		[14, 9, 's'],
+		[14, 10, 's'],
+		[14, 11, 's'],
+		[15, 5, 't'],
+		[15, 6, 't'],
+		[15, 10, 't'],
+		[15, 11, 't'],
+		[16, 4, 't'],
+		[16, 5, 't'],
+		[16, 6, 't'],
+		[16, 10, 't'],
+		[16, 11, 't'],
+		[16, 12, 't']
+		];
+
+		function dcdclr(a) {
+			if (a[2] == 'r') {
+				tt = 'rgb(246,43,37)';
+			} else if (a[2] == 't') {
+				tt = 'rgb(126,63,20)';
+			} else if (a[2] == 'f') {
+				tt = 'rgb(252,195,118)';
+			} else if (a[2] == 's') {
+				tt = 'rgb(69,84,201)';
+			} else if (a[2] == 'y') {
+				tt = 'rgb(254,221,80)';
+			} else {
+				tt = 'rgb(0,0,0)';
+			}
+			return tt;
+		}
+
+
+
+		mari.forEach((a) => {document.getElementById(`td${a[0]}_${a[1]}`).style.backgroundColor = dcdclr(a)});
+	}
+</script>
+<script>
+	function decidecolor(a) {
+		if (a[2] == 'b') {
+			tt = 'rgb(0,0,0)';
+		} else if (a[2] == 'y') {
+			tt = 'rgb(251,193,60)';
+		} else if (a[2] == 'o') {
+			tt = 'rgb(248,128,67)';
+		} else if (a[2] == 'f') {
+			tt = 'rgb(222,200,153)';
+		} else if (a[2] == 'w') {
+			tt = 'rgb(255,255,255)';
+		} else {
+			tt = 'rgb(171,170,166)';
+		}
+		return tt;
+
+	}
+</script>
+<script>
+	$('body').hide(0).show('blind', 600);
+</script>
+<script>
+	let isCrtl
+	document.onkeyup = function (e) {
+		if (e.which == 17) isCtrl = false;
+	}
+
+	document.onkeydown = function (e) {
+		if (e.which == 17) isCrtl = true;
+		if (e.which == 90 && isCrtl == true) {
+			document.getElementById('undo').click();
+		}
+	}
+</script>
+<script>
+	let arrtoString = "";
+	let temppaint = [];
+	function saving(){
+		let tttdds = $('td').get();
+		tttdds.forEach((a)=>{arrtoString += `[${a.style.backgroundColor},${a.id}]`});
+	}
+	var splits;
+	function loading(){
+		splits = arrtoString.split(/\[|\]/);
+		splits.forEach((a)=>{
+			if(a.length >= 2){
+				let b = a.split(',td');
+				let c = b[1].split('_');
+				let d = document.getElementById(`td${c[0]}_${c[1]}`).style.backgroundColor
+				let e = b[0];
+				document.getElementById(`td${c[0]}_${c[1]}`).style.backgroundColor = b[0];
+			}
+		})
+	}
+</script>
+
+
+
+</html>
