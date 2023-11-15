@@ -1,0 +1,7 @@
+.Logo {
+    text-align: center;
+    font-size: 4em;
+    grid-column: 1 / 4;
+    background-color: black;
+    color: white;
+}

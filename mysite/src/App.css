@@ -1,0 +1,55 @@
+
+
+
+.App {
+    display: grid;
+    grid-column: 12;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    grid-gap: 24px;
+    max-width: 1080px;
+    margin: 2vw auto;
+    border: 1px solid;
+}
+
+
+.MobileMenu {
+    display: none;
+}
+
+.primary-button {
+    display: none;
+}
+
+
+@media screen and (max-width: 767px) {
+    .App {
+        margin-top: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .MenuOnTop {
+        display: none;
+    }
+
+    .Logo {
+        border: none;
+        width: 100%;
+    }
+
+    .isMobile {
+        position: sticky;
+        top: 0;
+    }
+
+    .primary-button {
+        display: inline-block;
+    }
+
+
+
+    
+
+    
+}

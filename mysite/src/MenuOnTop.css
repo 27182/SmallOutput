@@ -1,0 +1,15 @@
+.MenuOnTop {
+    margin: auto;
+    padding: 0px;
+    font-size: 1.5em;
+    list-style-type: none;
+    grid-column: 4 / 13;
+    border: none;
+    
+}
+
+.MenuList {
+    margin: auto;
+    padding: 1em 1em;
+    display: inline;
+}
