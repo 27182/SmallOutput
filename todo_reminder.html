@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <title>TODO_REMINDER</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: bisque;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+                monospace;
+        }
+
+        #todo {
+            padding: 10px 20px;
+            width: 10vw;
+            border-radius: 25px;
+            margin-right: 10px;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vw;
+            width: 50vw;
+            background-color: blanchedalmond;
+
+        }
+
+        #ok {
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .close {
+            display: inline-block;
+            margin-left: 20px;
+        }
+
+        .close:after {
+            display: inline-block;
+            content: "\00d7";
+            font-size: 14px;
+        }
+
+        .liWrapper {
+            display: flex;
+            flex-direction: row;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <h1></h1>
+        <div id="todoWrapper">
+            <input id="todo" type="text" />
+            <input class="inputTime" type="number" id="hours" value="" placeholder="hours" />
+            <input class="inputTime" type="number" id="minutes" value="" placeholder="minutes" />
+            <input class="inputTime" type="number" id="seconds" value="" placeholder="seconds" />
+            <input type="text" id="remindTime" readonly />
+            <button id="ok" onclick="register()">확인</button>
+        </div>
+
+        <div id="listWrapper">
+            <ul id="todoList">
+
+            </ul>
+        </div>
+
+
+
+
+
+    </div>
+
+</body>
+
+<script>
+    let inputTime = document.querySelectorAll(".inputTime");
+    inputTime.forEach((item) => {
+        item.addEventListener("input", () => {
+            updateTextTime();
+
+        });
+    });
+
+    function updateTextTime() {
+        let currentTime = new Date();
+
+        let totalSeconds = getTotalSeconds();
+
+        let remindTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate()
+            , currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds() + totalSeconds, currentTime.getMilliseconds());
+
+        document.getElementById('remindTime').value = (remindTime.getHours() > 11 ? "오후 " : "오전 ")
+            + (remindTime.getHours() > 12 ? remindTime.getHours() - 12 : remindTime.getHours())
+            + "시 " + remindTime.getMinutes() + "분 " + remindTime.getSeconds() + "초";
+    }
+
+
+    function getTotalSeconds() {
+        let totalSeconds = 0;
+        let hours = document.getElementById('hours').value;
+        let minutes = document.getElementById('minutes').value;
+        let seconds = document.getElementById('seconds').value;
+        totalSeconds += hours == "" ? 0 : Number(hours) * 3600;
+        totalSeconds += minutes == "" ? 0 : Number(minutes) * 60;
+        totalSeconds += seconds == "" ? 0 : Number(seconds);
+
+        return totalSeconds;
+    }
+
+    function register() {
+        let ul = document.getElementById('todoList');
+        let wrapper = document.createElement("div");
+        let li = document.createElement("li");
+        let deleteButton = document.createElement("button");
+        deleteButton.className = "close";
+        wrapper.className = "liWrapper";
+        let currentTime = new Date();
+
+        let totalSeconds = getTotalSeconds();
+
+        let remindTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate()
+            , currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds() + totalSeconds, currentTime.getMilliseconds());
+
+        li.innerText = "할 일 " + document.getElementById('todo').value + " 를 " + remindTime + " 에 알림 "
+        startTimer(document.getElementById('todo').value, getTotalSeconds());
+
+        deleteButton.addEventListener("click", (a) => {
+            a.target.parentElement.remove();
+        });
+        wrapper.appendChild(li);
+        wrapper.appendChild(deleteButton);
+        ul.appendChild(wrapper);
+    }
+
+    function startTimer(todo, seconds) {
+        setTimeout(() => {
+            var snd = new Audio("file.wav"); // buffers automatically when created
+            snd.play();
+            alert(todo);
+        }, seconds * 1000);
+    }
+
+
+
+
+
+</script>
