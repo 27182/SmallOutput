@@ -2,8 +2,14 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TODO_REMINDER</title>
+    <title>TODO REMINDER</title>
     <style>
+        * {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            font-size: large;
+        }
+
         body {
             margin: 0;
             display: flex;
@@ -12,60 +18,109 @@
             background-color: bisque;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-                monospace;
         }
 
         #todo {
+            text-align: center;
             padding: 10px 20px;
-            width: 10vw;
+            width: 10;
             border-radius: 25px;
-            margin-right: 10px;
+            width: 35vw;
         }
 
         #container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vw;
+            height: 100vh;
             width: 50vw;
             background-color: blanchedalmond;
 
         }
 
         #ok {
-            padding: 10px 20px;
+            padding: 10px 50px;
             border-radius: 25px;
+            background-color: wheat;
         }
 
         .close {
+            border: none;
             display: inline-block;
-            margin-left: 20px;
+            margin-left: 15px;
+            background-color: blanchedalmond;
         }
 
-        .close:after {
-            display: inline-block;
-            content: "\00d7";
-            font-size: 14px;
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
         }
 
         .liWrapper {
             display: flex;
             flex-direction: row;
         }
+
+        #todoWrapper {
+            padding: 20px;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            border: 3px solid black;
+            border-radius: 25px;
+        }
+
+        #todoWrapper * {
+            margin: 8px;
+        }
+
+        #remindTime {
+            text-align: center;
+            background-color: blanchedalmond;
+            border: none;
+            width: auto;
+        }
+
+        .inputTime {
+            width: 5vw;
+            text-align: center;
+            border-radius: 25px;
+        }
+
+        #title {
+            font-size: 3vw;
+            font-style: oblique;
+            margin-bottom: 3vw;
+        }
     </style>
 </head>
 
 <body>
     <div id="container">
-        <h1></h1>
+        <div id="title">TO DO REMINDER</div>
         <div id="todoWrapper">
-            <input id="todo" type="text" />
-            <input class="inputTime" type="number" id="hours" value="" placeholder="hours" />
-            <input class="inputTime" type="number" id="minutes" value="" placeholder="minutes" />
-            <input class="inputTime" type="number" id="seconds" value="" placeholder="seconds" />
-            <input type="text" id="remindTime" readonly />
-            <button id="ok" onclick="register()">확인</button>
+            <div>
+                <span>
+                    할 일 :
+                </span>
+                <input id="todo" type="text" placeholder="context"/>
+            </div>
+            <div id="inputWrapper">
+                <input class="inputTime" type="number" id="hours" value="0" placeholder="hours" /> 시간
+                <input class="inputTime" type="number" id="minutes" value="0" placeholder="minutes" /> 분
+                <input class="inputTime" type="number" id="seconds" value="0" placeholder="seconds" /> 초 후
+            </div>
+            <div>
+                <input type="button" id="remindTime" value="" readonly /> 에 알리기
+            </div>
+            <button id="ok" onclick="register()">등록</button>
         </div>
 
         <div id="listWrapper">
@@ -84,6 +139,8 @@
 
 <script>
     let inputTime = document.querySelectorAll(".inputTime");
+    let curTime = new Date();
+
     inputTime.forEach((item) => {
         item.addEventListener("input", () => {
             updateTextTime();
@@ -93,6 +150,7 @@
 
     function updateTextTime() {
         let currentTime = new Date();
+        curTime = currentTime;
 
         let totalSeconds = getTotalSeconds();
 
@@ -104,15 +162,17 @@
             + "시 " + remindTime.getMinutes() + "분 " + remindTime.getSeconds() + "초";
     }
 
+    updateTextTime();
+
 
     function getTotalSeconds() {
         let totalSeconds = 0;
         let hours = document.getElementById('hours').value;
         let minutes = document.getElementById('minutes').value;
         let seconds = document.getElementById('seconds').value;
-        totalSeconds += hours == "" ? 0 : Number(hours) * 3600;
-        totalSeconds += minutes == "" ? 0 : Number(minutes) * 60;
-        totalSeconds += seconds == "" ? 0 : Number(seconds);
+        totalSeconds += hours == "0" ? 0 : Number(hours) * 3600;
+        totalSeconds += minutes == "0" ? 0 : Number(minutes) * 60;
+        totalSeconds += seconds == "0" ? 0 : Number(seconds);
 
         return totalSeconds;
     }
@@ -123,16 +183,22 @@
         let li = document.createElement("li");
         let deleteButton = document.createElement("button");
         deleteButton.className = "close";
+        deleteButton.innerText = "❌";
         wrapper.className = "liWrapper";
-        let currentTime = new Date();
+        let currentTime = curTime;
 
         let totalSeconds = getTotalSeconds();
 
         let remindTime = new Date(currentTime.getFullYear(), currentTime.getMonth(), currentTime.getDate()
             , currentTime.getHours(), currentTime.getMinutes(), currentTime.getSeconds() + totalSeconds, currentTime.getMilliseconds());
 
-        li.innerText = "할 일 " + document.getElementById('todo').value + " 를 " + remindTime + " 에 알림 "
-        startTimer(document.getElementById('todo').value, getTotalSeconds());
+        let remainTime = Number(remindTime - new Date()) / 1000;
+        if (remainTime <= 0) {
+            alert('이미 지나간 시간입니다.');
+            return;
+        }
+        li.innerText = "\"" + document.getElementById('todo').value + "\" 를 " 
+        + changeDateFormat(remindTime) + " 에 알림 ";
 
         deleteButton.addEventListener("click", (a) => {
             a.target.parentElement.remove();
@@ -140,17 +206,32 @@
         wrapper.appendChild(li);
         wrapper.appendChild(deleteButton);
         ul.appendChild(wrapper);
+        startTimer(document.getElementById('todo').value, remainTime, wrapper, deleteButton);
     }
 
-    function startTimer(todo, seconds) {
+    function startTimer(todo, seconds, wrapper, deleteButton) {
         setTimeout(() => {
-            var snd = new Audio("file.wav"); // buffers automatically when created
-            snd.play();
+            var context = new AudioContext();
+            var oscillator = context.createOscillator();
+            oscillator.type = "sine";
+            oscillator.frequency.value = 800;
+            oscillator.connect(context.destination);
+            oscillator.start();
+            setTimeout(function () {
+                oscillator.stop();
+            }, 100);
+            // wrapper.remove(); 알리기 완료되면 리스트를 지울까말까
+            // 체크로 바꿀까
+            deleteButton.innerText = "✅";
             alert(todo);
         }, seconds * 1000);
     }
 
 
+    function changeDateFormat(date){
+        date.setHours(date.getHours() + 9);
+        return date.toISOString().replace('T', ' ').substring(0, 19);
+    }
 
 
 
